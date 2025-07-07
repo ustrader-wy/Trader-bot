@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Signal Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background-color: #101014;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .dashboard {
+      background: #1a1a1a;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+      text-align: center;
+      border: 1px solid #333;
+    }
+    .dashboard img.logo {
+      width: 60px;
+      margin-bottom: 20px;
+    }
+    .dropdown,
+    .button,
+    .display-box {
+      background: #2c2c2e;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 15px;
+      width: 100%;
+      font-size: 16px;
+    }
+    .button {
+      background: #00bfff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .button:hover {
+      background: #0099cc;
+    }
+    .signal-box,
+    .timer-box {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .wait-box {
+      background: #009999;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Quotex_logo.png" alt="Bot Logo">
+    <div class="dropdown">
+      <label for="asset">Asset:</label>
+      <select id="asset">
+        <option>AUD/USD (OTC)</option>
+        <option>EUR/USD (OTC)</option>
+        <option>BTC/USD (OTC)</option>
+      </select>
+    </div>
+    <div class="display-box" id="countdown">TIME: 1:00</div>
+    <button class="button" onclick="getSignal()">GET SIGNAL</button>
+    <div class="signal-box" id="signalDisplay">WAIT</div>
+  </div>  <script>
+    function fetchDummyRSI() {
+      return Math.floor(Math.random() * 100);
+    }
+
+    function getSignal() {
+      const rsi = fetchDummyRSI();
+      let signal = '';
+
+      if (rsi < 30) signal = 'CALL';
+      else if (rsi > 70) signal = 'PUT';
+      else signal = 'WAIT';
+
+      document.getElementById('signalDisplay').textContent = signal + ' (RSI: ' + rsi + ')';
+      startTimer(60);
+    }
+
+    function startTimer(duration) {
+      let timer = duration, minutes, seconds;
+      const countdown = document.getElementById('countdown');
+
+      clearInterval(window.timerInterval);
+
+      window.timerInterval = setInterval(() => {
+        minutes = Math.floor(timer / 60).toString().padStart(2, '0');
+        seconds = (timer % 60).toString().padStart(2, '0');
+
+        countdown.textContent = `TIME: ${minutes}:${seconds}`;
+
+        if (--timer < 0) {
+          clearInterval(window.timerInterval);
+          countdown.textContent = 'TIME: 00:00';
+        }
+      }, 1000);
+    }
+  </script></body>
+</html>
